@@ -1,0 +1,109 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-100 p-4">
+    <mat-card class="w-full max-w-md shadow-2xl">
+        <mat-card-header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-lg">
+            <mat-card-title class="text-2xl font-bold flex items-center">
+                <mat-icon class="mr-2">security</mat-icon>
+                MLM System Login
+            </mat-card-title>
+            <mat-card-subtitle class="text-white/80 mt-2">
+                Secure multi-level management system
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="p-6">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+                <!-- Username -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Username or Email</mat-label>
+                    <input matInput formControlName="username" placeholder="Enter your username or email">
+                    <mat-icon matPrefix>person</mat-icon>
+                    @if (loginForm.get('username')?.hasError('required')) {
+                    <mat-error>Username is required</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Password -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                        placeholder="Enter your password">
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    @if (loginForm.get('password')?.hasError('required')) {
+                    <mat-error>Password is required</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- CAPTCHA -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="text-sm font-medium text-gray-700">Security CAPTCHA</label>
+                        <button type="button" mat-button color="primary" (click)="refreshCaptcha()"
+                            [disabled]="captchaLoading">
+                            <mat-icon>refresh</mat-icon>
+                            Refresh
+                        </button>
+                    </div>
+
+                    <!-- CAPTCHA Image -->
+                    <div
+                        class="border border-gray-300 rounded-lg p-4 bg-gray-50 flex items-center justify-center min-h-20">
+                        @if (captchaLoading) {
+                        <div class="text-center">
+                            <mat-spinner diameter="30"></mat-spinner>
+                            <p class="text-gray-500 mt-2">Loading CAPTCHA...</p>
+                        </div>
+                        } @else if (captchaImage) {
+                        <div [innerHTML]="captchaImage" class="captcha-image"></div>
+                        } @else {
+                        <div class="text-center text-gray-500">
+                            <mat-icon class="text-3xl mb-2">error</mat-icon>
+                            <p>CAPTCHA not loaded</p>
+                        </div>
+                        }
+                    </div>
+
+                    <!-- CAPTCHA Input -->
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Enter CAPTCHA</mat-label>
+                        <input matInput formControlName="captcha" placeholder="Type the characters above">
+                        <mat-icon matPrefix>verified_user</mat-icon>
+                        @if (loginForm.get('captcha')?.hasError('required')) {
+                        <mat-error>CAPTCHA is required</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+                        @if (!loading) {
+                        <ng-container>
+                            <mat-icon class="mr-2">login</mat-icon>
+                            Login
+                        </ng-container>
+                        } @else {
+                        <mat-spinner diameter="20"></mat-spinner>
+                        }
+                    </button>
+                </div>
+
+                <!-- Demo Credentials -->
+                <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex items-center text-blue-800 mb-2">
+                        <mat-icon class="mr-2">info</mat-icon>
+                        <span class="font-medium">Demo Credentials</span>
+                    </div>
+                    <div class="text-sm text-blue-700 space-y-1">
+                        <p><strong>Owner:</strong> owner / owner123</p>
+                        <p><strong>Admin:</strong> admin / admin123</p>
+                        <p><strong>User:</strong> user1 / user123</p>
+                        <p class="text-xs text-blue-600 mt-2">Note: Use the CAPTCHA shown above</p>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,37 @@
+/* Tree node styles */
+mat-tree {
+    background: white;
+}
+
+.mat-tree-node {
+    min-height: 60px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.mat-tree-node:hover {
+    background-color: #f9fafb;
+}
+
+/* Custom scrollbar for tree */
+.mat-tree {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.mat-tree::-webkit-scrollbar {
+    width: 8px;
+}
+
+.mat-tree::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.mat-tree::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.mat-tree::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

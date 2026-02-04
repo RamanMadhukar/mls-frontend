@@ -1,0 +1,5 @@
+.captcha-image svg {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 80px;
+}

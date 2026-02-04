@@ -1,0 +1,18 @@
+/* Card hover effects */
+mat-card {
+    transition: all 0.3s ease;
+}
+
+mat-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Gradient card animations */
+.bg-gradient-to-r {
+    background-size: 200% auto;
+    transition: 0.5s;
+}
+
+.bg-gradient-to-r:hover {
+    background-position: right center;
+}

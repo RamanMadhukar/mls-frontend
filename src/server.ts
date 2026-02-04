@@ -1,3 +1,4 @@
+import 'zone.js';  
 import {
   AngularNodeAppEngine,
   createNodeRequestHandler,

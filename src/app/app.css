@@ -1,0 +1,38 @@
+/* Active route styling */
+.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Role badges */
+.bg-red-100 {
+    background-color: #fee2e2;
+}
+
+.text-red-800 {
+    color: #991b1b;
+}
+
+.bg-purple-100 {
+    background-color: #e9d5ff;
+}
+
+.text-purple-800 {
+    color: #5b21b6;
+}
+
+.bg-blue-100 {
+    background-color: #dbeafe;
+}
+
+.text-blue-800 {
+    color: #1e40af;
+}
+
+.bg-gray-100 {
+    background-color: #f3f4f6;
+}
+
+.text-gray-800 {
+    color: #1f2937;
+}

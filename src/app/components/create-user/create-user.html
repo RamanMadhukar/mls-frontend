@@ -1,0 +1,149 @@
+<div class="container" [class.mx-auto]="!isDialog" [class.px-4]="!isDialog" [class.py-8]="!isDialog">
+    <mat-card class="shadow-lg" [class.max-w-md]="!isDialog" [class.mx-auto]="!isDialog">
+        <mat-card-header class="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-t-lg">
+            <mat-card-title class="flex items-center">
+                <mat-icon class="mr-2">person_add</mat-icon>
+                Create New User
+            </mat-card-title>
+            <mat-card-subtitle class="text-white/80">
+                Create a user at the next level in your hierarchy
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="p-6">
+            <form [formGroup]="createUserForm" (ngSubmit)="onSubmit()" autocomplete="off">
+
+                <!-- Username -->
+                <mat-form-field appearance="outline" class="w-full mb-4">
+                    <mat-label>Username</mat-label>
+                    <input matInput formControlName="username" placeholder="Enter username">
+                    <mat-icon matPrefix>person</mat-icon>
+
+                    <mat-hint>3-20 characters, letters, numbers and underscore only</mat-hint>
+
+                    @if (createUserForm.get('username')?.hasError('required')) {
+                    <mat-error>Username is required</mat-error>
+                    }
+                    @if (createUserForm.get('username')?.hasError('minlength')) {
+                    <mat-error>Username must be at least 3 characters</mat-error>
+                    }
+                    @if (createUserForm.get('username')?.hasError('maxlength')) {
+                    <mat-error>Username cannot exceed 20 characters</mat-error>
+                    }
+                    @if (createUserForm.get('username')?.hasError('pattern')) {
+                    <mat-error>Only letters, numbers and underscore allowed</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Email -->
+                <mat-form-field appearance="outline" class="w-full mb-4">
+                    <mat-label>Email Address</mat-label>
+                    <input matInput type="email" formControlName="email" placeholder="Enter email">
+                    <mat-icon matPrefix>email</mat-icon>
+
+                    @if (createUserForm.get('email')?.hasError('required')) {
+                    <mat-error>Email is required</mat-error>
+                    }
+                    @if (createUserForm.get('email')?.hasError('email')) {
+                    <mat-error>Please enter a valid email address</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Password -->
+                <mat-form-field appearance="outline" class="w-full mb-4">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                        placeholder="Enter password">
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+
+                    <mat-hint>
+                        <span [class]="getPasswordStrength(createUserForm.get('password')?.value).color">
+                            {{ getPasswordStrengthInfo() }}
+                        </span>
+                    </mat-hint>
+
+                    @if (createUserForm.get('password')?.hasError('required')) {
+                    <mat-error>Password is required</mat-error>
+                    }
+                    @if (createUserForm.get('password')?.hasError('minlength')) {
+                    <mat-error>Password must be at least 6 characters</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Password Requirements -->
+                @if (createUserForm.get('password')?.value) {
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-medium text-gray-700 mb-2">Password Requirements:</h4>
+                    <ul class="space-y-1">
+                        @for (requirement of getPasswordRequirements(); track requirement) {
+                        <li [class]="requirement.startsWith('✓') ? 'text-green-600' : 'text-red-600'">
+                            {{ requirement }}
+                        </li>
+                        }
+                    </ul>
+                </div>
+                }
+
+                <!-- Confirm Password -->
+                <mat-form-field appearance="outline" class="w-full mb-6">
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword"
+                        placeholder="Confirm password">
+                    <mat-icon matPrefix>lock_reset</mat-icon>
+                    <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
+                        <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+
+                    @if (createUserForm.get('confirmPassword')?.hasError('required')) {
+                    <mat-error>Please confirm your password</mat-error>
+                    }
+                    @if (createUserForm.hasError('passwordMismatch') &&
+                    !createUserForm.get('confirmPassword')?.hasError('required')) {
+                    <mat-error>Passwords do not match</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- User Info Summary -->
+                @if (currentUser) {
+                <div class="mb-6">
+                    <mat-card class="bg-blue-50 border border-blue-200">
+                        <mat-card-content class="p-4">
+                            <div class="flex items-center text-blue-800">
+                                <mat-icon class="mr-2">info</mat-icon>
+                                <span class="font-medium">User will be created at:</span>
+                            </div>
+                            <div class="mt-2 pl-8 text-blue-700">
+                                <p>• Level {{ currentUser.level + 1 }} in hierarchy</p>
+                                <p>• Under your supervision (Level {{ currentUser.level }})</p>
+                                <p>• Can only create users at Level {{ currentUser.level + 2 }}</p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                }
+
+                <!-- Actions -->
+                <div class="flex justify-end gap-3">
+                    <button mat-button type="button" (click)="onCancel()" [disabled]="loading">
+                        Cancel
+                    </button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+                        @if (!loading) {
+                        <ng-container>
+                            <mat-icon>person_add</mat-icon>
+                            Create User
+                        </ng-container>
+                        } @else {
+                        <mat-spinner diameter="20"></mat-spinner>
+                        }
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
