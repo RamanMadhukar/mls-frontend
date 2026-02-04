@@ -1,11 +1,11 @@
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-100 p-4">
     <mat-card class="w-full max-w-md shadow-2xl">
         <mat-card-header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-lg">
-            <mat-card-title class="text-2xl font-bold flex items-center">
+            <mat-card-title class="loginHead text-2xl font-bold flex items-center formDiv">
                 <mat-icon class="mr-2">security</mat-icon>
                 MLM System Login
             </mat-card-title>
-            <mat-card-subtitle class="text-white/80 mt-2">
+            <mat-card-subtitle class="text-white/80 mt-2 formDiv">
                 Secure multi-level management system
             </mat-card-subtitle>
         </mat-card-header>
@@ -13,7 +13,7 @@
         <mat-card-content class="p-6">
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
                 <!-- Username -->
-                <mat-form-field appearance="outline" class="w-full">
+                <mat-form-field appearance="outline" class="w-full formDiv">
                     <mat-label>Username or Email</mat-label>
                     <input matInput formControlName="username" placeholder="Enter your username or email">
                     <mat-icon matPrefix>person</mat-icon>
@@ -23,7 +23,7 @@
                 </mat-form-field>
 
                 <!-- Password -->
-                <mat-form-field appearance="outline" class="w-full">
+                <mat-form-field appearance="outline" class="w-full formDiv">
                     <mat-label>Password</mat-label>
                     <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
                         placeholder="Enter your password">
@@ -37,7 +37,7 @@
                 </mat-form-field>
 
                 <!-- CAPTCHA -->
-                <div class="space-y-2">
+                <div class="space-y-2 formDiv">
                     <div class="flex items-center justify-between">
                         <label class="text-sm font-medium text-gray-700">Security CAPTCHA</label>
                         <button type="button" mat-button color="primary" (click)="refreshCaptcha()"
@@ -66,7 +66,7 @@
                     </div>
 
                     <!-- CAPTCHA Input -->
-                    <mat-form-field appearance="outline" class="w-full">
+                    <mat-form-field appearance="outline" class="w-full formDiv">
                         <mat-label>Enter CAPTCHA</mat-label>
                         <input matInput formControlName="captcha" placeholder="Type the characters above">
                         <mat-icon matPrefix>verified_user</mat-icon>
@@ -77,8 +77,8 @@
                 </div>
 
                 <!-- Submit Button -->
-                <div class="pt-4">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+                <div class="pt-4 formDiv">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="loading" class="loginBtnDiv">
                         @if (!loading) {
                         <ng-container>
                             <mat-icon class="mr-2">login</mat-icon>
