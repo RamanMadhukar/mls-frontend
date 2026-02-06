@@ -30,22 +30,32 @@ export class UserService {
     constructor(private http: HttpClient) { }
 
     getDownline(): Observable<UserHierarchyResponse> {
-        return this.http.get<UserHierarchyResponse>(`${this.apiUrl}/downline`);
+        return this.http.get<UserHierarchyResponse>(`${this.apiUrl}/downline`, {
+            withCredentials: true // 👈 Add this
+        });
     }
 
     createNextLevelUser(userData: CreateUserRequest): Observable<any> {
-        return this.http.post(`${this.apiUrl}/create-user`, userData);
+        return this.http.post(`${this.apiUrl}/create-user`, userData, {
+            withCredentials: true // 👈 Add this
+        });
     }
 
     changePassword(userId: string, newPassword: string): Observable<any> {
-        return this.http.put(`${this.apiUrl}/change-password`, { userId, newPassword });
+        return this.http.put(`${this.apiUrl}/change-password`, { userId, newPassword }, {
+            withCredentials: true // 👈 Add this
+        });
     }
 
     getAllUsers(): Observable<{ success: boolean; users: User[] }> {
-        return this.http.get<{ success: boolean; users: User[] }>(`${this.apiUrl}/all`);
+        return this.http.get<{ success: boolean; users: User[] }>(`${this.apiUrl}/all`, {
+            withCredentials: true // 👈 Add this
+        });
     }
 
     getImmediateDownline(): Observable<User[]> {
-        return this.http.get<User[]>(`${this.apiUrl}/immediate-downline`);
+        return this.http.get<User[]>(`${this.apiUrl}/immediate-downline`, {
+            withCredentials: true // 👈 Add this
+        });
     }
 }

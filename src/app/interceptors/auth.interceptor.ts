@@ -1,26 +1,12 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
-
-import { AuthService } from '../services/auth.service';
+import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const authService = inject(AuthService);
-    const router = inject(Router);
-
-    // Clone request and add withCredentials
-    const authReq = req.clone({
-        withCredentials: true
-    });
-
-    return next(authReq).pipe(
-        catchError((error: HttpErrorResponse) => {
-            if (error.status === 401) {
-                authService.logout().subscribe();
-                router.navigate(['/login']);
-            }
-            return throwError(() => error);
-        })
-    );
+  // For cookie-based auth, we just need to add withCredentials: true
+  // The cookies will be sent automatically by the browser
+  
+  const clonedReq = req.clone({
+    withCredentials: true // 👈 This is the most important line
+  });
+  
+  return next(clonedReq);
 };

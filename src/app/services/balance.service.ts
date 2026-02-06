@@ -13,11 +13,15 @@ export class BalanceService {
     constructor(private http: HttpClient) { }
 
     creditBalance(request: CreditBalanceRequest): Observable<any> {
-        return this.http.post(`${this.apiUrl}/credit`, request);
+        return this.http.post(`${this.apiUrl}/credit`, request, {
+            withCredentials: true // 👈 Add this
+        });
     }
 
     selfRecharge(amount: number): Observable<any> {
-        return this.http.post(`${this.apiUrl}/recharge`, { amount });
+        return this.http.post(`${this.apiUrl}/recharge`, { amount }, {
+            withCredentials: true // 👈 Add this
+        });
     }
 
     getTransactionHistory(page: number = 1, limit: number = 10, type?: string): Observable<TransactionResponse> {
@@ -29,10 +33,15 @@ export class BalanceService {
             params = params.set('type', type);
         }
 
-        return this.http.get<TransactionResponse>(`${this.apiUrl}/transactions`, { params });
+        return this.http.get<TransactionResponse>(`${this.apiUrl}/transactions`, {
+            params,
+            withCredentials: true // 👈 Add this
+        });
     }
 
     getBalanceSummary(): Observable<{ success: boolean; summary: BalanceSummary }> {
-        return this.http.get<{ success: boolean; summary: BalanceSummary }>(`${this.apiUrl}/summary`);
+        return this.http.get<{ success: boolean; summary: BalanceSummary }>(`${this.apiUrl}/summary`, {
+            withCredentials: true // 👈 Add this
+        });
     }
 }

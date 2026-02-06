@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Add HttpHeaders
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -38,32 +38,38 @@ export class AuthService {
     }
 
     login(loginData: LoginRequest): Observable<LoginResponse> {
-        return this.http.post<LoginResponse>(`${this.apiUrl}/login`, loginData)
-            .pipe(
-                tap(response => {
-                    if (response.success && response.user) {
-                        this.setCurrentUser(response.user);
-                    }
-                })
-            );
+        return this.http.post<LoginResponse>(`${this.apiUrl}/login`, loginData, {
+            withCredentials: true // 👈 Add this for login
+        }).pipe(
+            tap(response => {
+                if (response.success && response.user) {
+                    this.setCurrentUser(response.user);
+                }
+            })
+        );
     }
 
     register(userData: any): Observable<any> {
-        return this.http.post(`${this.apiUrl}/register`, userData);
+        return this.http.post(`${this.apiUrl}/register`, userData, {
+            withCredentials: true // 👈 Add this
+        });
     }
 
     logout(): Observable<any> {
-        return this.http.post(`${this.apiUrl}/logout`, {})
-            .pipe(
-                tap(() => {
-                    this.clearCurrentUser();
-                    this.router.navigate(['/login']);
-                })
-            );
+        return this.http.post(`${this.apiUrl}/logout`, {}, {
+            withCredentials: true // 👈 Add this
+        }).pipe(
+            tap(() => {
+                this.clearCurrentUser();
+                this.router.navigate(['/login']);
+            })
+        );
     }
 
     refreshToken(): Observable<any> {
-        return this.http.post(`${this.apiUrl}/refresh-token`, {});
+        return this.http.post(`${this.apiUrl}/refresh-token`, {}, {
+            withCredentials: true // 👈 Add this
+        });
     }
 
     private setCurrentUser(user: User): void {
