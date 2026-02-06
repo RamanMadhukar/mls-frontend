@@ -87,8 +87,14 @@ export class TransactionHistoryComponent implements OnInit, AfterViewInit, OnDes
     });
   }
 
+  initializeSocket(): void {
+    this.socketService.connect();
+  }
+
   ngOnInit(): void {
     this.loadTransactions();
+    
+    this.initializeSocket();
 
     // Subscribe to real-time transaction updates
     this.socketSubscription = this.socketService.onNewTransaction()

@@ -65,10 +65,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.balance = this.user.balance || 0;
     this.commissionEarned = this.user.commissionEarned || 0;
 
+    // Initialize socket connection
+    this.initializeSocket();
+
     // Load dashboard data
     this.loadDashboardData();
+  }
 
-    // Subscribe to real-time updates
+  initializeSocket(): void {
+    // Connect socket only if user is authenticated
+    this.socketService.connect();
+
+    // Join user's room
+    if (this.user!.id)
+      this.socketService.joinUserRoom(this.user!.id);
+
+    // Setup socket listeners
     this.setupSocketListeners();
   }
 
@@ -188,5 +200,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.socketSubscription) {
       this.socketSubscription.unsubscribe();
     }
+    this.socketService.disconnect();
   }
 }
