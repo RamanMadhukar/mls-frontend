@@ -75,7 +75,6 @@ export class TransactionHistoryComponent implements OnInit, AfterViewInit, OnDes
   constructor(
     private balanceService: BalanceService,
     private fb: FormBuilder,
-    private datePipe: DatePipe,
     private socketService: SocketService,
     private snackBar: MatSnackBar
   ) {
@@ -93,7 +92,7 @@ export class TransactionHistoryComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnInit(): void {
     this.loadTransactions();
-    
+
     this.initializeSocket();
 
     // Subscribe to real-time transaction updates
@@ -224,7 +223,22 @@ export class TransactionHistoryComponent implements OnInit, AfterViewInit, OnDes
   }
 
   formatDate(date: string): string {
-    return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') || '';
+    // Use native JavaScript instead of DatePipe
+    if (!date) return '';
+
+    const dateObj = new Date(date);
+
+    // Check if date is valid
+    if (isNaN(dateObj.getTime())) return '';
+
+    // Format: dd/MM/yyyy HH:mm
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const year = dateObj.getFullYear();
+    const hours = dateObj.getHours().toString().padStart(2, '0');
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
   }
 
   getTransactionColor(type: string): string {

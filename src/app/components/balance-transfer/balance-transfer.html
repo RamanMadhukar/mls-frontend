@@ -34,8 +34,8 @@
                                 <mat-form-field appearance="outline" class="w-full">
                                     <mat-label>Choose a user from your downline</mat-label>
                                     <mat-select formControlName="receiverId">
-                                        @for (user of downlineUsers; track user.id) {
-                                        <mat-option [value]="user.id">
+                                        @for (user of downlineUsers; track user._id) {
+                                        <mat-option [value]="user._id">
                                             <div class="flex items-center justify-between">
                                                 <div>
                                                     <span class="font-medium">{{ user.username }}</span>
